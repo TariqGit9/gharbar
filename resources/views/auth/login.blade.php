@@ -5,10 +5,9 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
-
+                <div class="card-header">{{ __('Login '.(@$user ? @$user :'User')) }}</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route( @$login_route ? @$login_route :'login') }}">
                         @csrf
 
                         <div class="row mb-3">
@@ -38,7 +37,12 @@
                                 @enderror
                             </div>
                         </div>
-
+                        @if(session()->has('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Error!</strong> {{ session()->get('error') }}
+                                
+                            </div>
+                        @endif
                         <div class="row mb-3">
                             <div class="col-md-6 offset-md-4">
                                 <div class="form-check">
