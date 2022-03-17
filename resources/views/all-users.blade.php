@@ -11,7 +11,7 @@
         <i class="mdi ">
 
             <span class="float-right ml-3" >
-                <select class="form-control selectpicker @if(Auth::user()|| auth()->guard('admin')->check()) d-none @endif" data-live-search="true" name="user_roles" id="user_roles" >
+                <select class="form-control selectpicker " data-live-search="true" name="user_roles" id="user_roles" >
                         <option value="blogger">Blogger</option>
                         <option value="admin">Admin</option>
                         <option value="user">User</option>
@@ -54,17 +54,32 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="addUserForm">
+      <form id="addUserForm"  autocomplete="off">
         <div class="modal-body">
           <div class="form-row">
             <div class="form-group col ">
               <label class="bmd-label-floating form-required">Name </label>
-              <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp">
+              <input type="text" required class="required form-control" id="name" name="name" aria-describedby="emailHelp">
             </div>
             <div class="form-group col">
               <label class="bmd-label-floating ">Email</label>
-              <input type="text" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+              <input type="text" required class=" required form-control" id="email" name="email"  autocomplete="off" aria-describedby="emailHelp">
             </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col ">
+              <label class="bmd-label-floating form-required">Password </label>
+              <input type="password" required class=" required form-control" id="password" name="password" autocomplete="off" aria-describedby="emailHelp">
+            </div>
+            <div class="form-group col">
+              <label class="bmd-label-floating ">Confirm Password</label>
+              <input type="password" required class="required form-control" id="confirm_password" name="confirm_password" aria-describedby="emailHelp">
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="text-danger error-add"> </label>
           </div>
         </div>
         <div class="modal-footer">
@@ -91,7 +106,7 @@
           <div class="form-row">
             <div class="form-group col ">
               <label class="bmd-label-floating form-required">Name </label>
-              <input type="text" class="form-control" id="edit_name" name="edit_name" aria-describedby="emailHelp">
+              <input type="text" class="form-control"  id="edit_name" name="edit_name" aria-describedby="emailHelp">
             </div>
             <div class="form-group col">
               <label class="bmd-label-floating ">Email</label>
@@ -100,11 +115,13 @@
               <input type="hidden" class="form-control" id="edit_type" name="edit_type" aria-describedby="emailHelp">
 
             </div>
+
           </div>
+        
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary add-user">Add </button>
+          <button type="button" class="btn btn-primary edit-user">Edit </button>
         </div>
       </form>
 
@@ -114,7 +131,9 @@
 
 @push('javascript')
 <script>
-
+if("{{@$user_type}}" != 'superadmin'){
+  $('#user_roles').addClass('d-none');
+}
 var table;
 var active_user = 'blogger';
 $('.user-titles').text($("#user_roles option:selected").text());
@@ -125,7 +144,7 @@ function dataTableData(user_type){
         processing: true,
         serverSide: true,
         ajax: {
-            url: "{{route('get-all-users')}}", type: 'post',
+            url: "{{route($user.'-get-all-users')}}", type: 'post',
             data: {
             user_type: user_type,
             "_token": "{{ csrf_token() }}",
@@ -176,6 +195,93 @@ $(document).on('click', '.update-user', function() {
   $('#edit_type').val(type);
   $('#editUser').modal('show');
 });
+
+
+$(document).on('click', '.edit-user', function() {
+
+  var email = $('#edit_email').val();
+  var name = $('#edit_name').val();
+  var id = $('#edit_id').val();
+  var type = $('#edit_type').val();
+  $('#editUser').modal('show');
+  $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Authorization': getCookie('token'),
+
+            }
+
+        });
+  $.ajax({
+        type: "POST",
+        url: "{{route($user.'-edit-user')}}",
+        data : { email : email, name :name ,id : id, type :type }, // serializes the form's elements.
+        success: function(data)
+        {
+            if(data.success==true){
+            $('#editUser').modal('hide');
+          
+              Swal.fire(
+                'User Deleted!',
+                '',
+                'success'
+              );
+              dataTableData(active_user);
+            }else{
+                $('.alert-dismissible').removeClass('d-none'); 
+            }
+        }
+    });
+});
+
+$(document).on('click', '.add-user', function() {
+  $('.error-add').text('');
+var email = $('#email').val();
+var name = $('#name').val();
+var password = $('#password').val();
+var confirm_password = $('#confirm_password').val();
+
+if(confirm_password!=password){
+  $('.error-add').text('Password do not match');
+  return;
+}
+$.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Authorization': getCookie('token'),
+
+            }
+
+        });
+$.ajax({
+      type: "POST",
+      url: "{{route($user.'-add-user')}}",
+      data : { email : email, name :name ,password : password ,type : active_user}, // serializes the form's elements.
+      success: function(data)
+      {
+        $('.error-add').text('');
+
+          if(data.success==true){
+            $('#addUser').modal('hide');
+
+            dataTableData(active_user);
+            Swal.fire(
+              'User Added!',
+              '',
+              'success'
+            );
+            
+          }else{
+            $('.error-add').text(data.error);
+          }
+      },
+      error :function( data ) {
+        if( data.status === 422 ) {
+          $('.error-add').text('Please fill all the fields');
+        }
+      }
+  });
+});
 $(document).on('click', '.delete', function() {
   var color='#ca0b00';
   Swal.fire({
@@ -189,7 +295,33 @@ $(document).on('click', '.delete', function() {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
+          $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Authorization': getCookie('token'),
 
+            }
+
+        });
+        $.ajax({
+            type: "POST",
+            url: "{{route($user.'-delete-user')}}",
+            data : { id : $(this).data('id'), type :$(this).data('type') }, // serializes the form's elements.
+            success: function(data)
+            {
+                if(data.success==true){
+              
+                  Swal.fire(
+                    'User Deleted!',
+                    '',
+                    'success'
+                  );
+                  dataTableData(active_user);
+                }else{
+                    $('.alert-dismissible').removeClass('d-none'); 
+                }
+            }
+        });
         }
     });
 });

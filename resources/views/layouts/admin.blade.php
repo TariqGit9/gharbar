@@ -23,6 +23,7 @@
 	<link href="{{asset('admin-assets/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 	
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -112,28 +113,7 @@
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{@Auth::user()->name}}</span>
-                               
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#"  data-toggle="modal" data-target="#UserPasswordModal">
-                                    <i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Reset Password
-                                </a>
-                                <a class="dropdown-item" href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
-                            </div>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-									@csrf
-							</form>
-                        </li>
+                            <button class="btn Logout">Logout</button>
 
                     </ul>
 
@@ -202,14 +182,60 @@
     <!-- Core plugin JavaScript-->
 
     <!-- Custom scripts for all pages-->
+    
     <script src="{{asset('admin-assets/js/sb-admin-2.min.js')}}"></script>
 	<script src="{{asset('assets/js/axios.min.js')}}"></script>
 	<script src="{{asset('assets/css/datatable/js/jquery.dataTables.min.js')}}"></script>
 	<script src="{{asset('assets/css/datatable/js/dataTables.bootstrap4.js')}}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<script src="{{asset('admin-assets/js/sweetalert.js')}}"></script>
-    
+    <script>
+       
+    if(getCookie('guard')==false || getCookie('token')==false){
+        console.log(getCookie('guard')==null);
+        console.log(getCookie('guard')=="");
+        console.log(getCookie('guard')==false);
+        window.location.href = "http://localhost/gharbar-test";
+    }
+    else if("{{@$user_type}}" != getCookie('guard')){
+        window.history.back()
+        if(getCookie('guard')=='superadmin'){
+            window.location.href = "http://localhost/gharbar-test/super-admin/index";
+        }else{
+            window.location.href="http://localhost/gharbar-test/"+getCookie('guard')+"/index";
+        }
+    }
 
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        $(document).on('click', '.Logout', function() {
+            var cookies = document.cookie.split(";");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i];
+                var eqPos = cookie.indexOf("=");
+                var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            }
+            location.reload();
+        });
+
+
+        
+    </script>
     @stack('javascript')
 </body>
 

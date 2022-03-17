@@ -15,13 +15,13 @@ use Hash;
 use DataTables;
 //Traits 
 use App\Http\Traits\AuthenticateAllUser;
-use App\Http\Traits\AllUserTable;
+use App\Http\Traits\AllUserInfo;
 
 
 class AdminController extends Controller
 {
     use AuthenticateAllUser;
-    use AllUserTable;
+    use AllUserInfo;
 
     public function login()
     {
@@ -39,11 +39,7 @@ class AdminController extends Controller
         ]);
         $model=  new Admin;
         $response = $this->authenticateUser($model,$request->email,$request->password,'admin');
-        if( $response ){
-            return redirect()->route('admin-index');
-        }else{
-            return back()->with('error', 'Email or password is incorrect');  
-        }
+        return $response;
     }
 
     public function logout()
@@ -53,13 +49,49 @@ class AdminController extends Controller
     }
     public function index()
     {
-        return view('layouts.all-users');
+        $user_type="admin";
+        $user="admin";
+        return view('all-users', compact('user_type','user'));
     }
     public function getUsers(Request $request)
     {
         $type= $request->user_type;
-        $data = Blogger::all();
+        $model=  new Blogger;
+        $data = $model::all();
         return $this->getAllUsers($data,$type);
     }
-
+    public function deleteUser(Request $request)
+    {
+        $type = $request->type;
+        $model=  new Blogger;
+        $model::find($request->id)->delete();
+        return response()->json([
+            'success' => true,
+        ], 200);
+        
+    }
+    public function editUser(Request $request)
+    {
+        $type = $request->type;
+        $model=  new Blogger;
+        return $this->editUserInfo($request,$model);
+    }
+    public function addUser(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+            'name' => ['required']
+        ]);
+        $type = $request->type;
+        // dd($request->all());
+        if($type=='admin'){
+            $model=  new Admin;
+        }elseif($type=='user'){
+            $model=  new User;
+        }elseif($type=='blogger'){
+            $model=  new Blogger;
+        }
+        return $this->addUserInfo($request,$model);
+    }
 }

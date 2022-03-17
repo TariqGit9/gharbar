@@ -11,4 +11,8 @@ use Laravel\Passport\HasApiTokens;
 class Blogger  extends Authenticatable
 {
     use  HasApiTokens,HasFactory;
+    public function blogs()
+    {
+        return $this->hasMany('App\Models\Blog', 'user_id', 'id');
+    }
 }

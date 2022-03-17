@@ -16,9 +16,13 @@ trait AuthenticateAllUser {
             }
             // $data= Auth::guard('superadmin')->login($result);
             $success =  $result;
-            $success['token'] =  $result->createToken('superadmin',['superadmin'])->accessToken; 
+            // $success['token'] =  $result->createToken('superadmin',['superadmin'])->accessToken;
+            $success['token'] =  $result->createToken($guard ,[$guard])->accessToken;
+            
+            
             return response()->json([
                 'user' =>  $result,
+                'guard' =>  $guard,
                 'success' => true,
             ], 200);
         }

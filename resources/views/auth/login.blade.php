@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">{{ __('Login '.(@$user ? @$user :'User')) }}</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route( @$login_route ? @$login_route :'login') }}">
+                    <form method="POST" id="login-form" >
                         @csrf
 
                         <div class="row mb-3">
@@ -37,35 +37,20 @@
                                 @enderror
                             </div>
                         </div>
-                        @if(session()->has('error'))
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Error!</strong> {{ session()->get('error') }}
-                                
+                        
+                            <div class="alert d-none alert-danger alert-dismissible fade show">
+                                Invalid email or email
                             </div>
-                        @endif
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                        
+           
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" class="btn btn-primary login-action">
                                     {{ __('Login') }}
                                 </button>
 
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
+                           
                             </div>
                         </div>
                     </form>
@@ -74,4 +59,61 @@
         </div>
     </div>
 </div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+
+
+
+$(document).on('click', '.login-action', function() {
+
+    var form = $('#login-form');
+    var actionUrl = '{{route(@$login_route)}}';
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        type: "POST",
+        url: actionUrl,
+        data: form.serialize(), // serializes the form's elements.
+        success: function(data)
+        {
+            if(data.success==true){
+           
+                document.cookie = "token=Bearer "+data.user.token;
+                document.cookie = "name="+data.user.name;
+                document.cookie = "id="+data.user.id;
+                document.cookie = "guard="+data.guard;
+                $('.alert-dismissible').addClass('d-none'); 
+                if(getCookie('guard')=='superadmin'){
+                    window.location.href = "http://localhost/gharbar-test/super-admin/index";
+                }else{
+                    window.location.replace("http://localhost/gharbar-test/"+getCookie('guard')+"/index");
+                }
+               
+
+            }else{
+                $('.alert-dismissible').removeClass('d-none'); 
+            }
+        }
+    });
+
+});
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+</script>
 @endsection
