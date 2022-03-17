@@ -7,6 +7,8 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Config;
+
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -37,13 +39,13 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->configureRateLimiting();
-
+        // Config::set('auth.guards.api.provider', request()->input('provider', $this->stringStartsWith(request()->path(), 'api.super-admin') ? 'superadmins' : 'users'));
         $this->routes(function () {
             Route::prefix('api')
                 ->middleware('api')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
-
+           
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
@@ -61,4 +63,18 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
     }
+    // function stringStartsWith($haystack,$needle,$case=true) {
+    //     if ($case){
+    //         return strpos($haystack, $needle, 0) === 0;
+    //     }
+    //     return stripos($haystack, $needle, 0) === 0;
+    // }
+    
+    // function stringEndsWith($haystack,$needle,$case=true) {
+    //     $expectedPosition = strlen($haystack) - strlen($needle);
+    //     if ($case){
+    //         return strrpos($haystack, $needle, 0) === $expectedPosition;
+    //     }
+    //     return strripos($haystack, $needle, 0) === $expectedPosition;
+    // }
 }

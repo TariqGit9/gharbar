@@ -5,17 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Admin;
+use App\Models\Blogger;
+
+use App\Models\User;
 
 use Auth;
 use Hash; 
 
+use DataTables;
 //Traits 
 use App\Http\Traits\AuthenticateAllUser;
+use App\Http\Traits\AllUserTable;
 
 
 class AdminController extends Controller
 {
     use AuthenticateAllUser;
+    use AllUserTable;
 
     public function login()
     {
@@ -34,7 +40,7 @@ class AdminController extends Controller
         $model=  new Admin;
         $response = $this->authenticateUser($model,$request->email,$request->password,'admin');
         if( $response ){
-            return redirect()->route('home');
+            return redirect()->route('admin-index');
         }else{
             return back()->with('error', 'Email or password is incorrect');  
         }
@@ -47,6 +53,13 @@ class AdminController extends Controller
     }
     public function index()
     {
-        dd("Success Admin");
+        return view('layouts.all-users');
     }
+    public function getUsers(Request $request)
+    {
+        $type= $request->user_type;
+        $data = Blogger::all();
+        return $this->getAllUsers($data,$type);
+    }
+
 }

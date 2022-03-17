@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
         Route::post('/login', 'AdminController@authenticate')->name('admin-authenticate');
         Route::group(['middleware' => 'admin'], function () {
             Route::get('index', 'AdminController@index')->name('admin-index');
+            Route::post('get-all-users', 'AdminController@getUsers')->name('get-all-users');
+            
         });
     });
     Route::group(['prefix' => 'blogger'], function () {
@@ -34,7 +36,7 @@ use Illuminate\Support\Facades\Route;
     });
     Route::group(['prefix' => 'super-admin'], function () {
         Route::get('/login', 'SuperAdminController@login')->name('super-admin-login');
-        Route::post('/login', 'SuperAdminController@authenticate')->name('super-admin-authenticate');
+        // Route::post('/login', 'SuperAdminController@authenticate')->name('super-admin-authenticate');
         Route::group(['middleware' => 'super_admin'], function () {
             Route::get('super-admin-index', 'SuperAdminController@index')->name('super-admin-index');
         });

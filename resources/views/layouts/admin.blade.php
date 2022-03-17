@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Altitech Group - Dashboard</title>
+    <title>Gharbar Test - Dashboard</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{asset('admin-assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -21,7 +21,6 @@
     <link href="{{asset('admin-assets/css/sb-admin-2.min.css')}}" rel="stylesheet">
 	{{-- datatables --}}
 	<link href="{{asset('admin-assets/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 	
 </head>
@@ -39,67 +38,18 @@
                 <div class="sidebar-brand-icon rotate-n-15">
     
                 </div>
-                <div class="sidebar-brand-text mx-3">Altitech Group </div>
+                <div class="sidebar-brand-text mx-3">Gharbar Test </div>
             </a>
 
             <!-- Divider -->
-            <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Companies</span></a>
-            </li>
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
-            </div>
             <li class="nav-item">
                 <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-folder"></i>
-                    <span>Company Information</span>
+                    <span>All users</span>
                 </a>
             </li>
-            <hr class="sidebar-divider">
 
-
-
-            <!-- Divider -->
-    
-            <!-- Heading -->
-          
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <!-- <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                    </div>
-                </div>
-            </li> -->
-
-            <!-- Nav Item - Charts -->
-            <!-- <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li> -->
 
             <!-- Nav Item - Tables -->
             
@@ -243,44 +193,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="UserPasswordModal" tabindex="-1" role="dialog" aria-labelledby="PasswordModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Change Password</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form autocomplete="off">
-            <div class="modal-body">
-                <div class="form-group col ">
-                    <label class="bmd-label-floating form-required">Current Password </label>
-                    <div class="input-group mb-3">
-                        <input type="password"  class="form-control" id="current_password" name="current_password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
-                    </div>
-                </div>
-                <div class="form-group col ">
-                    <label class="bmd-label-floating form-required">New Password </label>
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
-                    </div>
-                </div>
-                <div class="form-group col ">
-                    <label class="bmd-label-floating form-required">Confirm New Password </label>
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control" id="confirm_new_password" name="confirm_new_password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
-                    </div>
-                </div>
-            </div>
-        </form>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary save_user_password">Save changes</button>
-            </div>
-            </div>
-        </div>
-    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('admin-assets/vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('admin-assets/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
@@ -290,22 +203,13 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{asset('admin-assets/js/sb-admin-2.min.js')}}"></script>
-
-    <!-- <script src="{{asset('admin-assets/vendor/chart.js/Chart.min.js')}}"></script> -->
-    <script src="{{asset('admin-assets/js/summernote.js')}}"></script>
-
-    <!-- Page level custom scripts -->
-    <!-- <script src="{{asset('admin-assets/js/demo/chart-area-demo.js')}}"></script>
-    <script src="{{asset('admin-assets/js/demo/chart-pie-demo.js')}}"></script> -->
 	<script src="{{asset('assets/js/axios.min.js')}}"></script>
 	<script src="{{asset('assets/css/datatable/js/jquery.dataTables.min.js')}}"></script>
 	<script src="{{asset('assets/css/datatable/js/dataTables.bootstrap4.js')}}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<script src="{{asset('admin-assets/js/sweetalert.js')}}"></script>
     
-    <script>
 
-  </script>
     @stack('javascript')
 </body>
 

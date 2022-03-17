@@ -40,9 +40,21 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver' => 'passport',
+            'provider' => 'users',
+        ],
+        'adminapi' => [
+            'driver' => 'passport',
+            'provider' => 'admins',
+        ],
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
+        ],
+        'bloggersapi' => [
+            'driver' => 'passport',
+            'provider' => 'bloggers',
         ],
         'bloggers' => [
             'driver' => 'session',
@@ -51,6 +63,10 @@ return [
         'users' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'superadminapi' => [
+            'driver' => 'token',
+            'provider' => 'superadmins',
         ],
         'superadmin' => [
             'driver' => 'session',

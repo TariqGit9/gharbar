@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,16 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        // if (! $this->app->routesAreCached()) {
+            Passport::routes();
+        // }
         //
+        Passport::tokensCan([
+            'user' => 'User Type',
+            'admin' => 'Admin User Type',
+            'superadmin' => 'Super Admin User Type',
+            'blogger' => 'Blogger User Type',
+
+        ]);
     }
 }

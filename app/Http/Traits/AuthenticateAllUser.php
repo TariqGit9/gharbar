@@ -9,16 +9,22 @@ trait AuthenticateAllUser {
     public function authenticateUser($model,$email,$password,$guard) {
         
         $result = $model::query()->where('email', $email)->first();
+        if($result){
 
-        if(!$result){
-            return false;
+            if (!Hash::check($password, $result->password)) {
+                return false;
+            }
+            // $data= Auth::guard('superadmin')->login($result);
+            $success =  $result;
+            $success['token'] =  $result->createToken('superadmin',['superadmin'])->accessToken; 
+            return response()->json([
+                'user' =>  $result,
+                'success' => true,
+            ], 200);
         }
-
-        if (!Hash::check($password, $result->password)) {
-            return false;
-        }
-        Auth::guard($guard)->login($result);
-        return true;
+        return response()->json([
+            'success' => false,
+        ], 200);
     }
 
 }

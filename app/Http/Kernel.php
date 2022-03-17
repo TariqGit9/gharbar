@@ -21,6 +21,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\ForceJsonResponse::class,
+
     ];
 
     /**
@@ -68,6 +70,10 @@ class Kernel extends HttpKernel
         'admin' =>  \App\Http\Middleware\AdminMiddleware::class,
         'super_admin' =>  \App\Http\Middleware\SuperAdminMiddleware::class,
         'blogger' =>  \App\Http\Middleware\BloggerMiddleware::class,
+        'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
+        'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
 
+        'json.response' => \App\Http\Middleware\ForceJsonResponse::class,
     ];
+
 }

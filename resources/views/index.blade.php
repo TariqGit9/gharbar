@@ -1,13 +1,34 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('content')
-  <!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Users</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header"> Login as</div>
+
+                <div class="card-body">
+                    <div class="row  text-center">
+                      <div class="col-2">
+                      </div>
+                      <div class="col-2" style="white-space: nowrap ;">
+                        <a type="button " href="{{ route('admin-login') }}" class="btn btn-primary">Super Admin</a>
+                      </div>
+                      <div class="col-2">
+                        <a type="button" href="{{ route('admin-login') }}" class="btn btn-secondary">Admin</a>
+                      </div>
+                      <div class="col-2">
+                        <a type="button" href="{{ route('login') }}" class="btn btn-success">User</a>
+                      </div>
+                      <div class="col-2">
+                        <a type="button" href="{{ route('blogger-login') }}" class="btn btn-danger">Blogger</a>
+                      </div>
+                      <div class="col-2">
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
-@push('javascript')
-
-@endpush
 @endsection
